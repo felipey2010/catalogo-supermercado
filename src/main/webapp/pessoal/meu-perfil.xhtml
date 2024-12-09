@@ -1,0 +1,333 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:jsf="http://xmlns.jcp.org/jsf"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+
+<c:set var="context"
+       value="#{facesContext.externalContext.request.contextPath}"
+       scope="session"/>
+
+<ui:composition template="/WEB-INF/include/template.xhtml">
+    <ui:define name="titulo">
+        Meu Perfil
+    </ui:define>
+
+    <ui:define name="breadcrumb">
+        <h:form id="breadcrumb-items">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item active fa"><span>Pessoal</span></li>
+                    <li class="breadcrumb-item active fa"><span>Meu Perfil</span></li>
+                </ol>
+            </nav>
+        </h:form>
+    </ui:define>
+
+    <ui:define name="formulario-titulo">
+        <h:form id="formulario-titulo-items">
+            <h:outputText value="Meu Perfil"/>
+        </h:form>
+    </ui:define>
+
+    <ui:define name="formulario-conteudo">
+        <h:form id="form-cadastro" role="form" onkeypress="if (KeyboardEvent.code === 13) { return false; }">
+            <p:growl globalOnly="true"/>
+            <div class="col-lg-12 row" style="padding: 0;">
+                <!--Navigation panel -->
+                <div class="col-lg-12 meu-perfil-nav" id="meu-perfil-nav">
+                    <h:commandLink value="1. Dados Pessoais"
+                                   action="#{meuPerfilController.updatePage(1)}"
+                                   styleClass="col-lg-4 col-md-6 col-xs-6 btn btn-w-m meu-perfil-nav-item
+                                   #{meuPerfilController.buttonSelected eq 1 ? 'btn-primary': 'meu-perfil-nav-item-inactive'}"
+                                   process="meu-perfil-nav" update="meu-perfil-content" />
+
+                    <h:commandLink value="2. Endereço"
+                                   action="#{meuPerfilController.updatePage(2)}"
+                                   styleClass="col-lg-4 col-md-6 col-xs-6 btn btn-w-m meu-perfil-nav-item
+                                   #{meuPerfilController.buttonSelected eq 2 ? 'btn-primary': 'meu-perfil-nav-item-inactive'}"
+                                   process="meu-perfil-nav" update="meu-perfil-content" />
+
+                    <h:commandLink value="3. Conta"
+                                   action="#{meuPerfilController.updatePage(3)}"
+                                   styleClass="col-lg-4 col-md-6 col-xs-6 btn btn-w-m meu-perfil-nav-item
+                                   #{meuPerfilController.buttonSelected eq 3 ? 'btn-primary': 'meu-perfil-nav-item-inactive'}"
+                                   process="meu-perfil-nav" update="meu-perfil-content" />
+                </div>
+
+                <!--CONTENT -->
+                <div class="col-lg-12" id="meu-perfil-content">
+                    <!--show the content of the navigation panel selected here -->
+
+                    <!-- FIRST PAGE - DADOS PESSOAIS-->
+                    <div class="col-lg-12 row meu-perfil-container"
+                         jsf:rendered="#{meuPerfilController.buttonSelected eq 1}"
+                         id="dado-pessoal">
+                        <div class="col-lg-8">
+                            <div class="form-group">
+                                <label class="required">Nome</label>
+                                <h:inputText id="nome-cad"
+                                             value="#{meuPerfilController.pessoa.nome}"
+                                             class="form-control"
+                                             disabled="true"
+                                             required="true" requiredMessage="Dado obrigatório"/>
+                                <h:message for="nome-cad" styleClass="input-error"/>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4">
+                            <div class="form-group">
+                                <label class="required">Sexo</label>
+                                <h:selectOneMenu id="sexo" class="form-control"
+                                                 value="#{meuPerfilController.pessoa.genero}"
+                                                 disabled="true">
+                                    <f:selectItem itemLabel="--selecione--"
+                                                  noSelectionOption="true"/>
+                                    <f:selectItems value="#{meuPerfilController.generos}"
+                                                   var="_genero"
+                                                   itemValue="#{_genero}"
+                                                   itemLabel="#{_genero}"/>
+                                </h:selectOneMenu>
+                                <h:message for="sexo" styleClass="input-error"/>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label class="required">CPF</label>
+                                <p:inputMask mask="999.999.999-99" id="cpf"
+                                             value="#{meuPerfilController.pessoa.codigo}"
+                                             disabled="true" required="true" requiredMessage="Dado obrigatório"
+                                             class="form-control input-mask-background"/>
+                                <h:message for="cpf" styleClass="input-error"/>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <div class="form-group"><label class="required">País</label>
+                                <h:selectOneMenu id="pais" class="form-control"
+                                                 value="#{meuPerfilController.pessoa.nacionalidade}"
+                                                 converter="omnifaces.SelectItemsConverter"
+                                                 disabled="true">
+                                    <f:selectItem itemLabel="--selecione--" noSelectionOption="true"/>
+                                    <f:selectItems value="#{meuPerfilController.paisList}" var="_pais"
+                                                   itemValue="#{_pais}" itemLabel="#{_pais.nome}"/>
+                                </h:selectOneMenu>
+                                <h:message for="pais" styleClass="input-error"/>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label class="required">E-mail</label>
+                                <h:inputText id="email"
+                                             value="#{meuPerfilController.pessoa.email}"
+                                             class="form-control" required="true" requiredMessage="Dado obrigatório"
+                                             disabled="false"/>
+                                <h:message for="email" styleClass="input-error"/>
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <h:commandLink value="Salvar"
+                                           action="#{meuPerfilController.salvarPessoa()}"
+                                           styleClass="btn btn-w-m btn-primary pull-right"
+                                           process="@this" update="@this" />
+                            <h:commandLink value="Cancelar"
+                                           action="/index.xhtml"
+                                           styleClass="btn btn-w-m btn-outline-secondary pull-right"
+                                           style="margin-right: 8px;"
+                            />
+                        </div>
+                    </div>
+                    <!-- END OF FIRST PAGE - DADOS PESSOAIS -->
+
+                    <!--SECOND PAGE - CONTA -->
+                    <div class="col-lg-12 row meu-perfil-container" jsf:rendered="#{meuPerfilController.buttonSelected eq 2}">
+                        <div class="col-lg-12" style="padding: 0;">
+                            <div class="col-lg-12" style="border-bottom: 1px solid #e2e2e257; margin-bottom: 1rem;">
+                                <label style="font-size: 1.6rem; margin: 0;">Redefinir senha</label>
+                                <p style="margin: 0 0 4px;">Não compartilhe sua senha.</p>
+                            </div>
+                            <div class="col-lg-4 col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    <label class="required" for="senha-atual">Senha Atual</label>
+                                    <h:inputSecret id="senha-atual" value="#{meuPerfilController.senhaAtual}"
+                                                   class="form-control" autocomplete="off"
+                                                   pt:placeholder="senha de acesso"
+                                                   disabled="false">
+                                        <f:ajax execute="@this" listener="#{meuPerfilController.checkCamposDeSenhaListener}"
+                                                render="container-redefinir-senha"/>
+                                    </h:inputSecret>
+                                    <h:message for="senha-atual" styleClass="input-error"/>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-4 col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    <label class="required" for="senha-nova">Senha Nova</label>
+                                    <h:inputSecret id="senha-nova" value="#{meuPerfilController.senhaNova}"
+                                                   class="form-control" autocomplete="off"
+                                                   pt:placeholder="minímo de 6 caracteres"
+                                                   disabled="false" >
+                                        <f:ajax execute="@this" listener="#{meuPerfilController.checkCamposDeSenhaListener}"
+                                                render="container-redefinir-senha"/>
+                                    </h:inputSecret>
+                                    <h:message for="senha-nova" styleClass="input-error"/>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-4 col-md-6 col-sm-12">
+                                <div class="form-group">
+                                    <label class="required" for="senha-confirmacao">Confirmar senha</label>
+                                    <h:inputSecret id="senha-confirmacao" value="#{meuPerfilController.senhaConfirmar}"
+                                                   class="form-control" autocomplete="off"
+                                                   pt:placeholder="repetir a nova senha"
+                                                   disabled="false" >
+                                        <f:ajax execute="@this" listener="#{meuPerfilController.checkCamposDeSenhaListener}"
+                                                render="container-redefinir-senha"/>
+                                    </h:inputSecret>
+                                    <h:message for="senha-confirmacao" styleClass="input-error"/>
+                                </div>
+                            </div>
+                            <div class="col-xs-12" jsf:id="container-redefinir-senha">
+                                <h:commandButton value="Atualizar"
+                                                 id="btn_redefinir_senha"
+                                                 disabled="#{meuPerfilController.btnRedefinirSenhaDesabilitado}"
+                                                 styleClass="btn btn-sm btn-w-m btn-info m-t-n-xs"
+                                                 onclick="$('#modal-redefinir-senha').modal('show');">
+                                    <f:ajax execute="@this" render="@form :form-redefinir-senha"/>
+                                </h:commandButton>
+                            </div>
+                        </div>
+
+                        <div class="hr-line-dashed col-xs-12"></div>
+
+                        <div class="col-lg-12" style="padding: 0;">
+                            <div class="col-lg-12" style="border-bottom: 1px solid #e2e2e257; margin-bottom: 1rem;">
+                                <p style="font-size: 1.6rem; margin: 0;">Excluir conta</p>
+                                <p style="margin: 0 0 4px;">Depois de confirmar a exclusão da sua conta, não há como voltar atrás. Por favor, tenha certeza.</p>
+                            </div>
+                            <div class="col-lg-12">
+                                <h:commandLink value="Excluir conta"
+                                               styleClass="btn btn-sm btn-w-m btn-danger m-t-n-xs"
+                                               onclick="$('#modal-excluir-conta').modal('show');"
+                                               style="margin-top: 4px;">
+                                    <f:ajax execute="@this" render="@form :form-excluir-conta"/>
+                                </h:commandLink>
+                            </div>
+                        </div>
+
+                        <div class="hr-line-dashed col-xs-12"></div>
+
+                        <div class="col-lg-12">
+                            <h:commandLink value="Cancelar"
+                                           action="/index.xhtml"
+                                           styleClass="btn btn-w-m btn-outline-secondary pull-right"
+                            />
+                        </div>
+
+
+                    </div>
+                    <!--END OF SECOND PAGE - CONTA -->
+                </div>
+                <!-- END OF CONTENT -->
+            </div>
+        </h:form>
+
+        <!-- MODAL EXCLUSÃO DE CONTA -->
+        <div id="modal-excluir-conta"
+             class="modal inmodal"
+             tabindex="-1"
+             data-keyboard="false"
+             data-backdrop="static"
+             role="dialog"
+             aria-hidden="true">
+            <div class="modal-dialog modal-md">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">
+                            Confirmar a exclusão da sua conta
+                        </h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-row">
+                            <h:form id="form-excluir-conta" role="form">
+                                <p>Deseja realmente excluir sua conta?</p>
+                                <p>Depois de confirmar, será deslogado e não terá mais acesso ao sistema</p>
+                            </h:form>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <h:commandButton value="Voltar"
+                                         pt:data-dismiss="modal"
+                                         styleClass="btn btn-outline-secondary float-right" update="@this"
+                                         style="margin-left: 10px; padding: 4px !important;"/>
+                        <h:commandButton value="Confirmar" action="#{meuPerfilController.excluirConta}"
+                                         style="margin-left: 10px;"
+                                         pt:data-dismiss="modal"
+                                         styleClass="btn btn-sm btn-w-m btn-danger pull-right m-t-n-xs">
+                            <f:ajax execute="@form" render="@form :form-dado-pessoa"/>
+                        </h:commandButton>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- FIM MODAL EXCLUSÃO DE CONTA -->
+
+        <!-- MODAL REDEFINIR SENHA -->
+        <div id="modal-redefinir-senha"
+             class="modal inmodal"
+             tabindex="-1"
+             data-keyboard="false"
+             data-backdrop="static"
+             role="dialog"
+             aria-hidden="true">
+            <div class="modal-dialog modal-md">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">
+                            Redefinir senha
+                        </h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-row">
+                            <h:form id="form-redefinir-senha" role="form">
+                                <div class="col-lg-12">
+                                    <label>Deseja realmente redefinir sua senha de acesso?</label>
+                                    <p>Se for bem sucedido, será deslogado do sistema e deve utilizar a nova senha no próximo login</p>
+                                </div>
+                            </h:form>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <h:commandButton value="Cancelar"
+                                         action="#{meuPerfilController.inicializarCamposDeSenha}"
+                                         pt:data-dismiss="modal"
+                                         styleClass="btn btn-outline-secondary float-right"
+                                         style="margin-left: 10px;" immediate="true">
+                            <f:ajax execute="@form" render="@form :form-cadastro container-redefinir-senha"/>
+                        </h:commandButton>
+                        <h:commandButton value="Redefinir" id="btnRedefinirSenha"
+                                         action="#{meuPerfilController.redefinirSenha}"
+                                         style="margin-left: 10px;"
+                                         pt:data-dismiss="modal"
+                                         styleClass="btn btn-sm btn-w-m btn-primary pull-right m-t-n-xs">
+                            <f:ajax execute="@form" render="@form :form-cadastro"/>
+                        </h:commandButton>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- FIM MODAL REDEFINIR SENHA -->
+
+    </ui:define>
+</ui:composition>
+
+</html>

@@ -1,0 +1,118 @@
+/*
+Created by Philip
+*/
+
+:root {
+    --primary-color: #08488b;
+    --button-hover-color: #004fa1;
+    --grey-color: grey;
+}
+
+body {
+    margin: 0;
+    box-sizing: border-box;
+    padding: 0;
+}
+
+.main-container {
+    width: 100vw;
+    min-height: 100vh;
+}
+
+.allowed-width {
+    width: 85%;
+}
+
+.bem-vindo-header {
+    width: 100%;
+    height: 60px;
+    box-shadow: 0 2px 6px 0 rgb(0 0 0 / 12%), inset 0 -1px 0 0 #dadce0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.bem-vindo-acessar {
+    text-decoration: none;
+    color: white;
+    font-weight: 600;
+    padding: 8px;
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    border-radius: 8px;
+    font-size: 18px;
+    transition: all .3s ease-in-out;
+}
+
+.bem-vindo-acessar:hover {
+    background-color: var(--button-hover-color);
+    border-color: var(--button-hover-color);
+}
+
+.container__1 {
+    height: calc((100vh) - 100px);
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.image-slider-container {
+    width: 85%;
+    height: 90%;
+    position: relative;
+}
+
+.image-slider-container img {
+    width: 100%;
+    height: 100%;
+    filter: brightness(0.8);
+    -webkit-filter: brightness(0.8);
+    box-shadow: 0px 2px 5px 1px #3d3d3d;
+}
+
+.image-slider-container .slider-description {
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    left: 8px;
+    background-color: rgba(0,0,0,0.5);
+    color: white;
+    padding: 8px;
+    border-radius: 8px;
+}
+
+.slider-buttons {
+    width: 85%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.slider-buttons span {
+    height: 12px;
+    width: 12px;
+    border-radius: 50%;
+    background-color: var(--grey-color);
+    border-color: rgba(0,0,0,0.5);
+    margin: 8px;
+    cursor: pointer;
+}
+
+.slider-buttons span:first-child {
+    background-color: var(--primary-color);
+}
+
+.bem-vindo-footer {
+    height: 39px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-top: 1px solid rgba(0,0,0,0.1);
+}
+
+.bem-vindo-footer span {
+    color: rgba(0,0,0,0.7);
+}

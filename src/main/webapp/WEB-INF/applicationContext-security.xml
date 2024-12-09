@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<b:beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://www.springframework.org/schema/security"
+         xmlns:b="http://www.springframework.org/schema/beans"
+         xmlns:context="http://www.springframework.org/schema/context"
+         xsi:schemaLocation="http://www.springframework.org/schema/beans            http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+	                            http://www.springframework.org/schema/security      http://www.springframework.org/schema/security/spring-security.xsd
+	                            http://www.springframework.org/schema/context 		http://www.springframework.org/schema/context/spring-context.xsd">
+    <http security="none" pattern="/publico/**"/>
+
+    <http auto-config="true">
+        <csrf disabled="true"/>
+
+        <intercept-url pattern="/index.xhtml" access="isAuthenticated()"/>
+
+        <form-login login-page="/login.xhtml"
+                    authentication-failure-url="/login.xhtml?error=true"
+                    default-target-url="/index.xhtml"
+                    always-use-default-target="true"/>
+
+        <logout invalidate-session="true" logout-url="/logout.xhtml" logout-success-url="/login.xhtml"
+                delete-cookies="JSESSIONID"/>
+
+        <access-denied-handler error-page="/error/403.xhtml"/>
+        <session-management invalid-session-url="/login.xhtml"/>
+    </http>
+
+    <authentication-manager alias="authenticationManager">
+        <authentication-provider user-service-ref="usuarioSecurity">
+            <password-encoder hash="md5"/>
+        </authentication-provider>
+    </authentication-manager>
+
+    <context:annotation-config/>
+    <b:bean name="usuarioSecurity" class="br.com.sistemadesupermercado.application.core.cdi.UsuarioSecurity"/>
+
+</b:beans>

@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:jsf="http://xmlns.jcp.org/jsf"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+<c:set var="context"
+       value="#{facesContext.externalContext.request.contextPath}"
+       scope="session"/>
+
+<ui:composition template="/WEB-INF/include/template.xhtml">
+    <ui:define name="titulo">
+        Mensagem Global
+    </ui:define>
+
+    <ui:define name="breadcrumb">
+        <h:form>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item active fa"><span>Administração</span></li>
+                    <li class="breadcrumb-item active fa"><span>Mensagem Global</span></li>
+                </ol>
+            </nav>
+        </h:form>
+    </ui:define>
+
+    <ui:define name="formulario-titulo">
+        Mensagem Global
+    </ui:define>
+
+    <ui:define name="formulario-titulo">
+        <h:outputText value="Administração / Mensagem Global"/>
+    </ui:define>
+
+    <ui:define name="formulario-conteudo">
+        <h:form id="form-cadastro" role="form">
+            <p:growl globalOnly="true"/>
+            <div class="row">
+                <!-- Lista -->
+                <div id="listagem" jsf:rendered="#{mensagemGlobalController.mensagem eq null}">
+                    <div class="col-xs-12 m-b-xs">
+                        <h:commandButton value="Novo" action="#{mensagemGlobalController.criarNovaMensagem}"
+                                         title="Nova mensagem"
+                                         styleClass="btn btn-sm btn-w-m btn-success pull-right">
+                            <f:ajax execute="@form" render="@form"/>
+                        </h:commandButton>
+                    </div>
+                    <div class="col-xs-12">
+                        <p:dataTable id="lista-tipo"
+                                     tableStyleClass="table table-bordered table-striped tabela-primefaces"
+                                     emptyMessage="Nenhuma mensagem cadastrada."
+                                     value="#{mensagemGlobalController.mensagens}"
+                                     var="_mensagem"
+                                     reflow="true"
+                                     filteredValue="#{mensagemGlobalController.listaFiltrada}"
+                                     widgetVar="_tabela"
+                                     paginator="true" paginatorAlwaysVisible="true" paginatorPosition="bottom" rows="10"
+                                     paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                     currentPageReportTemplate="Exibindo de {startRecord} a {endRecord} - Total: {totalRecords}">
+
+                            <f:facet name="header">
+                                <div>
+                                    <h:outputLabel for="globalFilter">Pesquisar:</h:outputLabel>
+                                    <h:inputText id="globalFilter" styleClass="form-control input-filter-table space-right" onkeyup="PF('_tabela').filter()" pt:placeholder="Palavra-Chave"/>
+                                </div>
+                            </f:facet>
+
+                            <p:column headerText="Ações" styleClass="coluna-acao">
+                                <h:commandLink title="Editar" styleClass="fa fa-edit btn-acoes-table">
+                                    <f:setPropertyActionListener value="#{_mensagem}"
+                                                                 target="#{mensagemGlobalController.mensagem}"/>
+                                    <f:ajax execute="@this" render="@form form-cadastro"/>
+                                </h:commandLink>
+
+                                <h:commandLink action="#{mensagemGlobalController.detalhar}" title="Detalhar"
+                                               styleClass="fa fa-search btn-acoes-table">
+                                    <f:setPropertyActionListener value="#{_mensagem}"
+                                                                 target="#{mensagemGlobalController.mensagem}"/>
+                                    <f:ajax execute="@form" render="@form form-cadastro"/>
+                                </h:commandLink>
+
+                                <h:commandLink styleClass="fa fa-trash-o btn-acoes-table"
+                                               onclick="$('#modal-remover-mensagem-global').modal('show');"
+                                               title="Excluir">
+                                    <f:ajax execute="@form" render=":form-remover-mensagem-global"/>
+                                    <f:setPropertyActionListener
+                                            value="#{_mensagem}"
+                                            target="#{mensagemGlobalController.mensagemRemocao}" />
+                                </h:commandLink>
+                            </p:column>
+
+                            <p:column headerText="Título" sortBy="#{_mensagem.titulo}" filterMatchMode="contains" filterBy="#{_mensagem.titulo}"
+                                      filterStyleClass="filter-style-column">
+                                <h:outputText value="#{_mensagem.titulo}"/>
+                            </p:column>
+
+                            <p:column headerText="Data" sortBy="#{_mensagem.dataInclusao}" width="20%">
+                                <h:outputText value="#{_mensagem.dataInclusao}">
+                                    <f:convertDateTime type="date" locale="pt_BR"/>
+                                </h:outputText>
+                            </p:column>
+
+                            <p:column headerText="Criado por" >
+                                <h:outputText value="#{_mensagem.usuario.pessoa.nome}"/>
+                            </p:column>
+                        </p:dataTable>
+                    </div>
+                </div>
+                <!-- /. fim lista -->
+
+                <!-- CADASTRO -->
+                <div class="col-lg-12">
+                    <div id="cadastro" class="col-lg-12 container-with-shadow" jsf:rendered="#{mensagemGlobalController.mensagem ne null}">
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <h:outputLabel value="Título"
+                                               for="mensagem-titulo"
+                                               styleClass="label-confirmacao required"/>
+                                <h:inputText
+                                        id="mensagem-titulo"
+                                        disabled="#{mensagemGlobalController.desabilitado}"
+                                        value="#{mensagemGlobalController.mensagem.titulo}"
+                                        required="true" requiredMessage="Dado obrigatório"
+                                        class="form-control"/>
+                                <h:message for="mensagem-titulo" styleClass="input-error"/>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <h:outputLabel value="Conteúdo"
+                                               for="conteudo-cad"
+                                               styleClass="label-confirmacao required"/>
+                                <label Class="required">Conteúdo</label>
+                                <h:inputTextarea rows="10"
+                                                 id="conteudo-cad"
+                                                 disabled="#{mensagemGlobalController.desabilitado}"
+                                                 required="true" requiredMessage="Dado obrigatório"
+                                                 value="#{mensagemGlobalController.mensagem.mensagem}"
+                                                 class="form-control"/>
+                                <h:message for="conteudo-cad" styleClass="input-error"/>
+                            </div>
+                        </div>
+
+                        <div class="hr-line-dashed col-xs-12"></div>
+                        <div class="col-lg-12">
+                            <h:commandButton id="cmd-salvar"
+                                             value="Salvar"
+                                             action="#{mensagemGlobalController.salvarMensagem}"
+                                             styleClass="btn btn-sm btn-w-m btn-primary pull-right m-2">
+                                <f:ajax execute="@form" render="@form"/>
+                            </h:commandButton>
+                            <h:commandButton value="Voltar"
+                                             action="#{mensagemGlobalController.limparTela}"
+                                             styleClass="btn btn-sm btn-w-m btn-info pull-right m-2">
+                                <f:ajax execute="@this" render="@form"/>
+                            </h:commandButton>
+                        </div>
+                    </div>
+                </div>
+                <!-- /. Fim cadastro -->
+            </div>
+        </h:form>
+
+        <!-- MODAL CONFIRMAÇÃO DA EXCLUSÃO DE MENSAGEM GLOBAL -->
+        <div id="modal-remover-mensagem-global"
+                class="modal inmodal"
+                tabindex="-1"
+                data-keyboard="false"
+                data-backdrop="static"
+                role="dialog"
+                aria-hidden="true">
+            <div class="modal-dialog modal-md">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">
+                            Confirmar exclusão
+                        </h4>
+                    </div>
+
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <h:form id="form-remover-mensagem-global" role="form">
+                                    <h:outputText value="Deseja confirmar a exclusão da mensagem: #{mensagemGlobalController.mensagemRemocao.titulo}?" />
+                                </h:form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <h:commandButton value="Voltar"
+                                       pt:data-dismiss="modal"
+                                       styleClass="btn btn-sm btn-w-m btn-info pull-right m-2" update="@this"
+                                       />
+
+                        <h:commandButton value="Excluir"
+                                         pt:data-dismiss="modal"
+                                         action="#{mensagemGlobalController.excluirMensagem}"
+                                         styleClass="btn btn-sm btn-w-m btn-danger pull-right m-2"
+                                         >
+                            <f:ajax execute="@form" render="@form :form-cadastro"/>
+                        </h:commandButton>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- FIM MODAL CONFIRMAÇÃO DA EXCLUSÃO DE MENSAGEM GLOBAL -->
+    </ui:define>
+</ui:composition>
+
+</html>

@@ -1,0 +1,42 @@
+.destaque-linha:hover {
+    background-color: #0e4276;
+    color: #FFFFFF;
+    border-radius: 5px;
+    transition: 0.3s ease-in;
+}
+
+.acao__executada{
+    text-align: justify
+}
+
+.acao__executada--30px{
+    width: 50px;
+}
+
+
+.secretaria-titulos{
+    text-align: center;
+    background-color: #0e4276;
+
+    color: #fff;
+    border-radius: 8px;
+    margin-top: 15px;
+    margin-bottom: 10px;
+    padding: 10px;
+}
+
+.secretaria-titulos:hover{
+    transition: 0.2s ease-in;
+    text-align: center;
+
+    background-color: #0eaa76;
+    color: #FFFFFF;
+}
+
+.ui-datatable-header {
+    text-align: center !important;
+    border: 1px solid #e7e7e7 !important;
+    color: #000000 !important;
+    text-transform: capitalize !important;
+    padding-right: 0 !important;
+}

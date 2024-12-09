@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:jsf="http://xmlns.jcp.org/jsf"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+
+<script type="text/javascript">
+    $('.dinheiro').mask('#.##0,00', {reverse: true});
+</script>
+
+<c:set var="context"
+       value="#{facesContext.externalContext.request.contextPath}"
+       scope="session"/>
+<h:head>
+    <!-- Required meta tags -->
+    <meta charset="UTF-8"/>
+    <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <meta name="author" content="anonimo"/>
+    <meta
+            name="description"
+            content="Catalogo de supermercado - Sistema de gerenciamento de produtos"
+    />
+    <meta
+            name="keywords"
+            content="sites, web, meta tag, código, html, sistema, supermercado"
+    />
+
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="#{context}/resources/css/login.css"/>
+    <link rel="stylesheet" href="#{context}/resources/css/estilo.css"/>
+    <link rel="stylesheet" href="#{context}/resources/css/template-style.css"/>
+    <link href="#{context}/resources/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="#{context}/resources/css/styles.css" rel="stylesheet"/>
+
+    <link href="#{context}/resources/css/floating-labels.css" rel="stylesheet"/>
+</h:head>
+
+<ui:composition template="/WEB-INF/include/template.xhtml">
+    <ui:define name="titulo">
+        Página Inicial
+    </ui:define>
+
+    <ui:define name="breadcrumb">
+        <h:form>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item active fa"><span>Página Inicial</span></li>
+                </ol>
+            </nav>
+        </h:form>
+    </ui:define>
+
+    <ui:define name="formulario-titulo">
+        Notícias
+    </ui:define>
+
+    <ui:define name="formulario-conteudo">
+        <h:form id="form-principal" role="form" onkeypress="if (event.keyCode === 13) { return false; }">
+            <p:growl globalOnly="true"/>
+            <div class="row">
+                <!--INFORME GLOBAL-->
+                <div class="col-lg-6 col-md-12 col-sm-12">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            Informe GLOBAL
+                        </div>
+                        <div class="panel-body">
+                            <div>
+                                <div class="chat-activity-list"
+                                     jsf:rendered="#{painelPrincipalController.mensagensGlobais ne null}">
+                                    <ui:repeat value="#{painelPrincipalController.mensagensGlobais}"
+                                               var="_mensagem">
+                                        <h:commandLink onclick="$('#modal-detalhes-mensagem-global').modal('show');"
+                                                       title="Visualizar">
+                                            <div class="chat-element chat-element-hover">
+                                                <span class="pull-left">
+                                                    <i class="fa fa-envelope"/>
+                                                </span>
+                                                <div class="media-body ">
+                                                    <small class="pull-right text-navy">
+                                                        <h:outputText value="#{_mensagem.dataInclusao}">
+                                                            <f:convertDateTime type="date"/>
+                                                        </h:outputText>
+                                                    </small>
+                                                    <strong>#{_mensagem.titulo}</strong>
+                                                    <p class="m-b-xs" style="text-align: justify !important;">
+                                                        #{painelPrincipalController.checkMessageLength(_mensagem.mensagem, 180)}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <f:ajax execute="@form" render=":form-detalhes-mensagem-global"/>
+                                            <f:setPropertyActionListener
+                                                    value="#{_mensagem}"
+                                                    target="#{painelPrincipalController.mensagemGlobalSelecionada}"/>
+                                        </h:commandLink>
+                                    </ui:repeat>
+                                </div>
+                                <div class="chat-activity-list"
+                                     jsf:rendered="#{painelPrincipalController.mensagensGlobais.size() eq 0}">
+                                    <!--Se Mensagem global for null-->
+                                    <div class="col-lg-12">
+                                        <div class="chat-element">
+                                            <span class="pull-left">
+                                                <i class="fa fa-envelope"/>
+                                            </span>
+                                            <div class="media-body ">
+                                                <small class="pull-right text-navy">
+                                                    <h:outputText value="#{painelPrincipalController.currentDate}">
+                                                        <f:convertDateTime type="date"/>
+                                                    </h:outputText>
+                                                </small>
+                                                <strong>Nenhuma Notícia Cadastrada</strong>
+                                                <p class="m-b-xs" style="text-align: justify !important;">
+                                                    As notícias aparecerão aqui
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--FIM DE INFORME GLOBAL-->
+            </div>
+        </h:form>
+
+        <!-- MODAL MENSAGEM GLOBAL -->
+        <div id="modal-detalhes-mensagem-global"
+             class="modal inmodal"
+             tabindex="-1"
+             data-keyboard="false"
+             data-backdrop="static"
+             role="dialog"
+             aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">
+                            Detalhes da mensagem
+                        </h4>
+                    </div>
+
+                    <div class="modal-body">
+                        <h:form id="form-detalhes-mensagem-global" role="form">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <h:outputLabel value="Título"
+                                                       for="mensagem-titulo"
+                                                       styleClass="label-confirmacao"/>
+                                        <h:inputText
+                                                id="mensagem-titulo"
+                                                disabled="true"
+                                                value="#{painelPrincipalController.mensagemGlobalSelecionada.titulo}"
+                                                class="form-control"/>
+                                        <h:message for="mensagem-titulo" styleClass="input-error"/>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <h:outputLabel value="Conteúdo"
+                                                       for="text-area"
+                                                       styleClass="label-confirmacao"/>
+                                        <h:inputTextarea rows="10"
+                                                         id="text-area"
+                                                         disabled="true"
+                                                         value="#{painelPrincipalController.mensagemGlobalSelecionada.mensagem}"
+                                                         class="form-control"/>
+                                        <h:message for="text-area" styleClass="input-error"/>
+                                    </div>
+                                </div>
+
+                                <!-- data de criação da mensagem-->
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <h:outputLabel value="Criado em"
+                                                       for="data-criada"
+                                                       styleClass="label-confirmacao"/>
+                                        <div class="input-group date"
+                                             data-provide="datepicker"
+                                             data-date-format="dd/mm/yyyy"
+                                             data-date-autoclose="true"
+                                             data-date-language="pt-BR"
+                                             data-date-start-view="months">
+
+                                            <p:inputMask mask="99/99/9999" id="data-criada"
+                                                         value="#{painelPrincipalController.mensagemGlobalSelecionada.dataInclusao}"
+                                                         data-date-format="dd/mm/yyyy" converterMessage="Data inválida"
+                                                         autocomplete="off"
+                                                         class="form-control input-mask-background"
+                                                         disabled="true"
+                                            >
+                                                <f:convertDateTime pattern="dd/MM/yyyy" type="date"/>
+                                            </p:inputMask>
+                                            <span class="input-group-addon"><i class="fa fa-calendar"/></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Fim da data de criação da mensagem-->
+
+                            </div>
+                        </h:form>
+                    </div>
+
+                    <div class="modal-footer">
+                        <h:commandButton value="Fechar"
+                                         pt:data-dismiss="modal"
+                                         styleClass="btn btn-sm btn-w-m btn-info pull-right m-t-n-xs" update="@this"
+                                         style="margin-bottom: 0 !important;"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- FIM MODAL MENSAGEM GLOBAL -->
+
+    </ui:define>
+</ui:composition>
+</html>

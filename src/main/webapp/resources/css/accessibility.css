@@ -1,0 +1,166 @@
+/* Geral */
+.contrast,
+.contrast nav,
+.contrast div,
+.contrast li,
+.contrast ol,
+.contrast ul,
+.contrast header,
+.contrast footer,
+.contrast section,
+.contrast main,
+.contrast aside,
+.contrast article {
+    background: black !important;
+    color: white !important;
+}
+
+.contrast .search-group-icon  {
+    color: yellow !important;
+}
+
+.contrast h1,
+.contrast h2,
+.contrast h3,
+.contrast h4,
+.contrast h5,
+.contrast h6,
+.contrast p,
+.contrast label,
+.contrast strong,
+.contrast em,
+.contrast cite,
+.contrast q,
+.contrast i,
+.contrast b,
+.contrast u,
+.contrast span {
+    color: white !important;
+}
+
+.contrast a,
+.contrast a span {
+    color: yellow !important;
+}
+
+.contrast button,
+.contrast input[type=button],
+.contrast input[type=reset],
+.contrast input[type=submit] {
+    background: black !important;
+    color: yellow !important;
+    /*border: none !important;*/
+}
+
+.contrast input[type=text],
+.contrast input[type=password],
+.contrast input[type=url],
+.contrast input[type=search],
+.contrast input[type=email],
+.contrast input[type=tel],
+.contrast input[type=date],
+.contrast input[type=month],
+.contrast input[type=week],
+.contrast input[type=datetime],
+.contrast input[type=datetime-local],
+.contrast textarea,
+.contrast input[type=number],
+.contrast select,
+.contrast .legislacao-categories .category  {
+    background: black !important;
+    border: 1px solid white !important;
+    color: white !important;
+}
+
+/* Particularidades */
+.contrast .action-icon svg,
+.contrast .export-button span,
+.contrast .export-button svg,
+.contrast .file-card span,
+.contrast .file-card svg,
+.contrast .close-modal,
+.contrast .nav-links li,
+.contrast .nav-links li span {
+    color: yellow !important;
+}
+
+.contrast *::before,
+.contrast *::after {
+    background: #FFF !important;
+}
+
+.contrast tbody tr:nth-child(odd),
+.contrast .card-legislacao-container,
+.contrast .card-legislacao-container section,
+.contrast .modal-body .primary-button,
+.contrast .info {
+    background: #121213 !important;
+}
+
+.contrast .card-legislacao-container .card-title,
+.contrast .card-legislacao-container svg,
+.contrast .card-legislacao-container h3,
+.contrast .navegacao-container span {
+    color: yellow !important;
+}
+
+.contrast footer,
+.contrast .submenu {
+    border-top: 1px solid #FFF !important;
+}
+
+.contrast .on .submenu{
+    border-top: none !important;
+    background-color: #121213 !important;
+}
+
+.contrast .on .submenu li{
+    border-top: none !important;
+    border-radius: 4px;
+    background-color: #121213 !important;
+}
+
+.contrast header,
+.contrast #bar-container,
+.contrast nav {
+    border-bottom: 1px solid #FFF !important;
+}
+
+.contrast .export-button,
+.contrast .search-group button {
+    border: 1px solid #FFF !important;
+}
+
+.contrast .export-button #icon-container {
+    background: #121213 !important;
+}
+
+.contrast .ReactModal__Overlay {
+    background-color: rgba(234, 234, 234, 0.52) !important;
+}
+
+.contrast .modal-content {
+    border-radius: 5px !important;
+}
+
+.contrast .file-card {
+    border-color: yellow !important;
+}
+
+.contrast .one,
+.contrast .two,
+.contrast .three,
+.contrast .loading-bar {
+    background-color: yellow !important;
+}
+
+.contrast .Toastify__toast,
+.contrast .Toastify__toast-body,
+.contrast .Toastify__close-button {
+    border-radius: 4px !important;
+    background: #121213 !important;
+}
+
+.contrast .Toastify__progress-bar {
+    background: #FFF !important;
+}

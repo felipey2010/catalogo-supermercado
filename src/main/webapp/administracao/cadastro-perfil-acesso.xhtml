@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:jsf="http://xmlns.jcp.org/jsf"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+
+<c:set var="context"
+       value="#{facesContext.externalContext.request.contextPath}"
+       scope="session"/>
+
+<ui:composition template="/WEB-INF/include/template.xhtml">
+
+    <ui:define name="titulo">
+        Perfil
+    </ui:define>
+
+    <ui:define name="breadcrumb">
+        <h:form>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item active fa"><span>Administração</span></li>
+                    <li class="breadcrumb-item active fa"><span>Perfis de Acesso</span></li>
+                </ol>
+            </nav>
+        </h:form>
+    </ui:define>
+
+    <ui:define name="formulario-titulo">
+        <h:outputText value="Perfis de Acesso"/>
+    </ui:define>
+
+    <ui:define name="formulario-conteudo">
+        <h:form id="form-cadastro" role="form" onkeypress="if (KeyboardEvent.code === 13) { return false; }">
+            <p:growl globalOnly="true"/>
+            <div class="row">
+                <!-- LISTAGEM -->
+                <div id="listagem" jsf:rendered="#{perfilController.perfil eq null}">
+                    <div class="col-xs-12 m-b-xs">
+                        <h:commandButton value="Novo" action="#{perfilController.novoPerfil}"
+                                         title="Novo perfil"
+                                         styleClass="btn btn-sm btn-w-m btn-success pull-right">
+                            <f:ajax execute="@form" render="@form"/>
+                        </h:commandButton>
+                    </div>
+                    <div class="col-xs-12">
+                        <p:dataTable id="lista-tipo"
+                                     tableStyleClass="table table-bordered table-striped tabela-primefaces"
+                                     emptyMessage="Nenhum perfil foi encontrado."
+                                     value="#{perfilController.listaDePerfis}"
+                                     var="_perfil"
+                                     reflow="true"
+                                     filteredValue="#{perfilController.listaFiltrada}"
+                                     widgetVar="_tabela"
+                                     paginator="true" paginatorAlwaysVisible="true" paginatorPosition="bottom" rows="10"
+                                     paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                     currentPageReportTemplate="Exibindo de {startRecord} a {endRecord} - Total: {totalRecords}">
+
+                            <f:facet name="header">
+                                <div>
+                                    <h:outputLabel value="Pesquisar:"
+                                                   for="globalFilter"/>
+                                    <h:inputText id="globalFilter"
+                                                 styleClass="form-control input-filter-table space-right"
+                                                 onkeyup="PF('_tabela').filter()" pt:placeholder="Palavra-Chave"/>
+                                </div>
+                            </f:facet>
+
+                            <p:column headerText="Ações" styleClass="coluna-acao">
+                                <h:commandLink styleClass="fa fa-search btn-acoes-table"
+                                               action="#{perfilController.detalhar}" title="Detalhar dados">
+                                    <f:setPropertyActionListener target="#{perfilController.perfil}"
+                                                                 value="#{_perfil}"/>
+                                    <f:ajax execute="@this" render="@form"/>
+                                </h:commandLink>
+
+                                <h:commandLink styleClass="fa fa-edit btn-acoes-table"
+                                               action="#{perfilController.editar}" title="Editar">
+                                    <f:setPropertyActionListener target="#{perfilController.perfil}"
+                                                                 value="#{_perfil}"/>
+                                    <f:ajax execute="@this" render="@form"/>
+                                </h:commandLink>
+
+                                <h:commandLink title="#{_perfil.dataRemocao eq null ? 'Desativar' : 'Ativar'}"
+                                               styleClass="fa #{_perfil.dataRemocao eq null ? 'fa-toggle-on' : 'fa-toggle-off'} btn-acoes-table"
+                                               onclick="$('#modal-desativar-perfil').modal('show');">
+                                    <f:setPropertyActionListener value="#{_perfil}"
+                                                                 target="#{perfilController.perfilAtivarDesativar}"/>
+                                    <f:ajax execute="@this" render=":form-desativar-perfil"/>
+                                </h:commandLink>
+                            </p:column>
+
+                            <p:column headerText="ID" width="10%">
+                                <h:outputText value="#{_perfil.id}"/>
+                            </p:column>
+
+                            <p:column headerText="Perfil" sortBy="#{_perfil.nome}" filterMatchMode="contains"
+                                      filterBy="#{_perfil.nome}" filterStyleClass="filter-style-column">
+                                <h:outputText value="#{_perfil.nome}"/>
+                            </p:column>
+
+                            <p:column headerText="Status" width="20%">
+                                <span class="badge badge-pill badge-info"
+                                      jsf:rendered="#{_perfil.dataRemocao eq null}">Ativo</span>
+                                <span class="badge badge-pill badge-warning"
+                                      jsf:rendered="#{_perfil.dataRemocao ne null}">Inativo</span>
+                            </p:column>
+                        </p:dataTable>
+                    </div>
+                </div>
+                <!-- FIM DA LISTAGEM -->
+
+                <!-- CADASTRO -->
+                <div class="col-lg-12">
+                    <div id="cadastro" class="col-lg-12 container-with-shadow"
+                         jsf:rendered="#{perfilController.perfil ne null}">
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <h:outputLabel value="Nome do Perfil"
+                                               for="perfil-cad"
+                                               styleClass="label-confirmacao required"/>
+                                <h:inputText id="perfil-cad"
+                                             value="#{perfilController.perfil.nome}"
+                                             class="form-control"
+                                             required="true" requiredMessage="Dado obrigatório"
+                                             disabled="#{perfilController.desabilitado}"/>
+                                <h:message for="perfil-cad" styleClass="input-error"/>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <h:outputLabel value="Acessos"
+                                               for="acessos-cad"
+                                               styleClass="label-confirmacao"/>
+                                <p:selectManyCheckbox id="acessos-cad"
+                                                      styleClass="form-control"
+                                                      layout="responsive"
+                                                      columns="2"
+                                                      value="#{perfilController.perfil.acessos}"
+                                                      converter="omnifaces.SelectItemsConverter"
+                                                      rendered="#{not perfilController.desabilitado}">
+                                    <f:attribute name="collectionType" value="java.util.ArrayList"/>
+                                    <f:selectItems value="#{perfilController.listaDeAcessos}"
+                                                   var="_acesso"
+                                                   itemValue="#{_acesso}"
+                                                   itemLabel="#{_acesso.descricao}"/>
+                                </p:selectManyCheckbox>
+                                <h:message for="acessos-cad" styleClass="input-error"/>
+                            </div>
+
+                            <div jsf:rendered="#{perfilController.desabilitado}" class="col-xs-12"
+                                 style="border: 1px solid #e5e6e7; display: inline-table; padding-top: 16px; margin-top: -9px;">
+                                <ui:repeat value="#{perfilController.perfil.acessos}" var="_acesso">
+                                    <div class="col-xs-4">
+                                        <div class="form-group">
+                                            <i class="fa fa-check-square-o" style="margin-right: 5px; color: #b7b7b7;"/>
+                                            <span style="font-weight: 700;"><h:outputText
+                                                    value="#{_acesso.descricao}"/></span>
+                                        </div>
+                                    </div>
+                                </ui:repeat>
+                            </div>
+
+                        </div>
+
+                        <div class="hr-line-dashed col-xs-12"></div>
+                        <div class="col-xs-12">
+                            <h:commandButton value="Salvar" action="#{perfilController.salvar}"
+                                             disabled="#{perfilController.desabilitado}"
+                                             styleClass="btn btn-sm btn-w-m btn-primary pull-right m-2">
+                                <f:ajax execute="@form" render="@form"/>
+                            </h:commandButton>
+
+                            <h:commandButton value="Salvar e Continuar" action="#{perfilController.salvarContinuar}"
+                                             disabled="#{perfilController.desabilitado}"
+                                             styleClass="btn btn-sm btn-w-m btn-primary pull-right m-2">
+                                <f:ajax execute="@form" render="@form"/>
+                            </h:commandButton>
+                            <h:commandButton value="Voltar"
+                                             action="#{perfilController.limparTela}"
+                                             styleClass="btn btn-sm btn-w-m btn-info pull-right m-2" immediate="true">
+                                <f:ajax execute="@form" render="@form"/>
+                            </h:commandButton>
+                        </div>
+                    </div>
+                </div>
+                <!-- FIM DO CADASTRO -->
+            </div>
+        </h:form>
+
+        <!-- MODAL DESATIVAR DE PERFIL -->
+        <div id="modal-desativar-perfil"
+             class="modal inmodal"
+             tabindex="-1"
+             data-keyboard="false"
+             data-backdrop="static"
+             role="dialog"
+             aria-hidden="true">
+            <div class="modal-dialog modal-md">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">
+                            Confirmar desativação
+                        </h4>
+                    </div>
+
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <h:form id="form-desativar-perfil" role="form">
+                                    <h:outputText
+                                            value="Deseja confirmar a desativação do perfil: #{perfilController.perfilAtivarDesativar.nome}? Após a confirmação, os usuários que possuírem este perfil perderão o acesso aos módulos que ele fornece."/>
+                                </h:form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <h:commandButton value="Voltar"
+                                         pt:data-dismiss="modal"
+                                         styleClass="btn btn-sm btn-w-m btn-info pull-right m-t-n-xs" update="@this"
+                                         style="margin-bottom: 0 !important; margin-left: 10px;"/>
+
+                        <h:commandButton value="Confirmar"
+                                         pt:data-dismiss="modal"
+                                         action="#{perfilController.ativarDesativarPerfil}"
+                                         styleClass="btn btn-sm btn-w-m btn-primary pull-right m-t-n-xs"
+                                         style="margin-bottom: 0 !important;">
+                            <f:ajax execute="@form" render="@form :form-cadastro"/>
+                        </h:commandButton>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- FIM MODAL DESATIVAR DE PERFIL -->
+    </ui:define>
+</ui:composition>
+
+</html>

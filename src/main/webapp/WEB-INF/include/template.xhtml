@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html
+        lang="pt-br"
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:c="http://java.sun.com/jsp/jstl/core"
+        xmlns:p="http://primefaces.org/ui"
+        xmlns:o="http://omnifaces.org/ui"
+>
+<c:set
+        var="context"
+        value="#{facesContext.externalContext.request.contextPath}"
+        scope="session"
+/>
+<h:head>
+    <!-- Required meta tags -->
+    <meta charset="UTF-8"/>
+    <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <meta name="author" content="anonimo"/>
+    <meta
+            name="description"
+            content="Catálogo de supermercado - Sistema de gerenciamento de produtos"
+    />
+    <meta
+            name="keywords"
+            content="sites, web, meta tag, código, html, sistema, supermercado"
+    />
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="#{context}/resources/css/bootstrap.css"/>
+    <link href="#{context}/resources/css/bootstrap.min.css" rel="stylesheet"/>
+    <link
+            rel="stylesheet"
+            href="#{context}/resources/font-awesome/css/font-awesome.css"
+    />
+    <link rel="stylesheet" href="#{context}/resources/css/template-style.css"/>
+
+    <h:outputStylesheet library="css" name="estilo.css"/>
+    <h:outputStylesheet
+            library="webjars"
+            name="font-awesome/5.15.0/css/all.min-jsf.css"
+    />
+    <h:outputStylesheet
+            library="webjars"
+            name="font-awesome/5.15.0/css/v4-shims.min-jsf.css"
+    />
+
+    <link
+            href="#{context}/resources/css/plugins/datepicker/bootstrap-datepicker3.standalone.min.css"
+            rel="stylesheet"
+    />
+    <link href="#{context}/resources/css/styles.css" rel="stylesheet"/>
+    <link href="#{context}/resources/css/animate.css" rel="stylesheet"/>
+
+    <link
+            rel="shortcut icon"
+            type="image/x-icon"
+            href="#{context}/resources/imagens/favicon/favicon.ico"
+    />
+
+    <title><ui:insert name="titulo">Catálogo de Supermercado</ui:insert></title>
+</h:head>
+
+<h:body>
+    <div class="wrapper content-container grey-bg">
+        <!-- Sidebar -->
+        <ui:insert name="menu">
+            <ui:include src="/WEB-INF/include/menu.xhtml"></ui:include>
+        </ui:insert>
+
+        <!-- Page Content -->
+        <div id="content">
+            <!--Hamburguer button -->
+            <header class="conteudo-bloco-barra-sistema navbar bd-navbar">
+                <div
+                        class="col-lg-12"
+                        style="
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+            "
+                >
+                    <button type="button" id="sidebarCollapse" class="btn navbar-btn">
+                        <i class="fa fa-bars text-white"></i>
+                    </button>
+
+                    <div class="float-left" style="padding: 10px 0">
+              <span>
+                <a href="#{context}/index.xhtml" class="titulo-sistema">
+                  Catálogo de Supermercado
+                </a>
+              </span>
+                    </div>
+
+                    <div class="float-right">
+              <span style="font-size: 0.9em">
+                <h:outputText
+                        value="#{sessionMB.usuario.usuario.pessoa.nome}"
+                />
+              </span>
+
+                        <span title="Perfil">
+                <a
+                        href="#{context}/pessoal/meu-perfil.xhtml"
+                        class="botao-superior"
+                >
+                  <i class="fa fa-key" style="color: #fff"/>
+                </a>
+              </span>
+
+                        <span title="Sair">
+                <a href="#{context}/logout.xhtml" class="botao-superior">
+                  <i class="fa fa-power-off" style="color: #fff"/>
+                </a>
+              </span>
+                    </div>
+                </div>
+            </header>
+
+            <!--            Conteudo-->
+            <div
+                    class="wrapper wrapper-content custom-card"
+                    style="flex-direction: column"
+            >
+                <div class="row" style="padding: 0 8px">
+                    <div class="col-lg-12">
+                        <p:messages
+                                id="messages"
+                                globalOnly="true"
+                                showDetail="true"
+                                showSummary="false"
+                                closable="true"
+                                autoUpdate="true"
+                        />
+                    </div>
+                    <o:highlight styleClass="error"/>
+                </div>
+                <div class="row" style="padding: 0 18px">
+                    <ui:insert name="breadcrumb"> Breadcrumb </ui:insert>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-12">
+                        <ui:insert name="conteudo">
+                            <div
+                                    class="wrapper wrapper-content"
+                                    style="justify-content: center"
+                            >
+                                <div class="row col-lg-12" style="padding: 0 !important">
+                                    <div class="col-lg-12">
+                                        <div class="ibox float-e-margins">
+                                            <h3
+                                                    style="
+                            padding-bottom: 4px;
+                            border-bottom: 1px solid #e2e2e296;
+                          "
+                                            >
+                                                <ui:insert name="formulario-titulo">
+                                                    Formulario titulo
+                                                </ui:insert>
+                                            </h3>
+
+                                            <ui:insert name="formulario-conteudo">
+                                                formulario conteudo
+                                            </ui:insert>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </ui:insert>
+                    </div>
+                </div>
+                <p:ajaxStatus
+                        styleClass="pull-right"
+                        style="
+              padding-bottom: 120px;
+              padding-right: 120px;
+              height: 20px;
+              width: 20px;
+              position: absolute;
+              bottom: 0;
+              right: 0;
+            "
+                >
+                    <f:facet name="start">
+                        <div class="sk-spinner sk-spinner-fading-circle">
+                            <div class="sk-circle1 sk-circle"></div>
+                            <div class="sk-circle2 sk-circle"></div>
+                            <div class="sk-circle3 sk-circle"></div>
+                            <div class="sk-circle4 sk-circle"></div>
+                            <div class="sk-circle5 sk-circle"></div>
+                            <div class="sk-circle6 sk-circle"></div>
+                            <div class="sk-circle7 sk-circle"></div>
+                            <div class="sk-circle8 sk-circle"></div>
+                            <div class="sk-circle9 sk-circle"></div>
+                            <div class="sk-circle10 sk-circle"></div>
+                            <div class="sk-circle11 sk-circle"></div>
+                            <div class="sk-circle12 sk-circle"></div>
+                        </div>
+                    </f:facet>
+                    <f:facet name="complete">
+                        <h:outputText value=""/>
+                    </f:facet>
+                </p:ajaxStatus>
+            </div>
+
+            <!-- /. Fim conteudo -->
+            <div class="footer">
+                <div class="col-lg-12" style="padding: 0;">
+                    <div class="d-flex flex-column footer-left col-lg-6 col-md-12">
+                        <h6>Catálogo de Supermercado</h6>
+                    </div>
+
+                    <div class="d-flex flex-column footer-right col-lg-6 col-md-12">
+                        <p>- 1.0.0</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"
+    ></script>
+    <script src="#{context}/resources/js/bootstrap.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $("#sidebarCollapse").on("click", function () {
+                $("#sidebar").toggleClass("active")
+            })
+        })
+    </script>
+</h:body>
+</html>

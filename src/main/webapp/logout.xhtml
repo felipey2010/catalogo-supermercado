@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="pt-br"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+<c:set var="context" value="#{facesContext.externalContext.request.contextPath}" scope="session"/>
+
+<h:head>
+    <!-- Required meta tags -->
+    <meta charset="UTF-8"/>
+    <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <meta name="author" content="anonimo"/>
+    <meta
+            name="description"
+            content="Catalogo de supermercado - Sistema de gerenciamento de produtos"
+    />
+    <meta
+            name="keywords"
+            content="sites, web, meta tag, código, html, sistema, supermercado"
+    />
+
+    <title><ui:insert name="titulo">Catálogo de Supermercado</ui:insert></title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="#{context}/resources/css/login.css"/>
+    <link rel="stylesheet" href="#{context}/resources/css/estilo.css"/>
+    <link rel="stylesheet" href="#{context}/resources/css/template-style.css"/>
+
+    <link href="#{context}/resources/css/floating-labels.css" rel="stylesheet"/>
+</h:head>
+<h:body>
+</h:body>
+</html>

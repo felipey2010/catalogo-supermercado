@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:c="http://java.sun.com/jsp/jstl/core"
+                xmlns:jsf="http://xmlns.jcp.org/jsf">
+    <c:set var="context" value="#{facesContext.externalContext.request.contextPath}" scope="session"/>
+
+    <nav id="sidebar">
+        <div class="sidebar-header">
+            <span class="titulo-sistema">
+                <a href="#{context}/index.xhtml">
+                    Cat. Super
+                </a>
+            </span>
+        </div>
+        <ul class="list-unstyled components">
+            <!-- MENU DE ADMINISTRADOR-->
+            <li jsf:rendered="#{seguranca.roleMensagemGlobal or seguranca.rolePerfisAcesso or
+            seguranca.roleUsuario}">
+                <a href="#admin" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+                    <i class="fa fa-cog i-menu" style="margin-right: 13px !important;"></i>
+                    Administração
+                </a>
+                <ul class="collapse list-unstyled" id="admin">
+                    <li jsf:rendered="#{seguranca.roleMensagemGlobal}">
+                        <a href="#{context}/administracao/cadastro-mensagem-global.xhtml">Mensagem Global</a>
+                    </li>
+                    <li jsf:rendered="#{seguranca.rolePerfisAcesso}">
+                        <a href="#{context}/administracao/cadastro-perfil-acesso.xhtml">Perfis de Acesso</a>
+                    </li>
+                    <li jsf:rendered="#{seguranca.roleUsuario}">
+                        <a href="#{context}/administracao/cadastro-usuario.xhtml">Usuários</a>
+                    </li>
+                </ul>
+            </li>
+
+
+            <!-- MENU PESSOAL PARA VISUALIZAR AS INFORMAÇÕES DO SERVIDOR-->
+            <li>
+                <a href="#pessoal" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+                    <i class="fa fa-user i-menu" style="margin-right: 13px !important;"></i>
+                    Pessoal
+                </a>
+                <ul class="collapse list-unstyled" id="pessoal">
+                    <li><a href="#{context}/pessoal/meu-perfil.xhtml">Meu Perfil</a>
+                    </li>
+                </ul>
+            </li>
+
+        </ul>
+    </nav>
+</ui:composition>
